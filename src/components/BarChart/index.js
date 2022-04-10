@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import ReactECharts from "echarts-for-react";
 
 import echarts from "echarts/lib/echarts";
@@ -6,37 +6,10 @@ import "echarts/lib/chart/bar";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 
-import moment from "moment";
-
-import DateRange from "../DateRange";
-
 import { AuthContext } from "../../context";
 
 const BarChart = (_) => {
   const { data } = useContext(AuthContext);
-  const [filterApplied, setFilterApplied] = useState(false);
-  const [dates, setDates] = useState({
-    fromDate: null,
-    toDate: null,
-  });
-
-  const handleFromChange = (e) => {
-    const newDates = {
-      fromDate: new Date(e),
-      toDate: dates.toDate,
-    };
-    setFilterApplied(true);
-    setDates(newDates);
-  };
-
-  const handleToChange = (e) => {
-    const newDates = {
-      fromDate: dates.fromDate,
-      toDate: new Date(e),
-    };
-    setFilterApplied(true);
-    setDates(newDates);
-  };
 
   const reduced = data.reduce(function (allDates, date) {
     if (
@@ -56,16 +29,10 @@ const BarChart = (_) => {
     return allDates;
   }, []);
 
-  const filteredData = [];
-
-  const xAxisData = !filterApplied
-    ? reduced.map((item) => item.date)
-    : filteredData.map((item) => item.date);
+  const xAxisData = reduced.map((item) => item.date);
 
   const series = {
-    data: !filterApplied
-      ? reduced.map((itemI) => itemI.expense)
-      : filteredData.map((itemI) => itemI.expense),
+    data: reduced.map((itemI) => itemI.expense),
     type: "bar",
     showBackground: true,
     backgroundStyle: {
@@ -85,6 +52,14 @@ const BarChart = (_) => {
     yAxis: {
       type: "value",
     },
+    dataZoom: [
+      {
+        type: "slider",
+      },
+      {
+        type: "inside",
+      },
+    ],
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -96,12 +71,6 @@ const BarChart = (_) => {
 
   return (
     <div style={{ marginTop: 50 }}>
-      <DateRange
-        fromDate={dates.fromDate}
-        toDate={dates.toDate}
-        handleFromChange={handleFromChange}
-        handleToChange={handleToChange}
-      />
       <ReactECharts
         option={config}
         lazyUpdate

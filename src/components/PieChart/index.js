@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import ReactECharts from "echarts-for-react";
 
 import echarts from "echarts/lib/echarts";
@@ -6,20 +6,10 @@ import "echarts/lib/chart/bar";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 
-import DateRange from "../DateRange";
-
 import { AuthContext } from "../../context";
 
 const PieChart = (_) => {
   const { data } = useContext(AuthContext);
-  const [dates, setDates] = useState({
-    fromDate: new Date(),
-    toDate: new Date(),
-  });
-
-  const handleFromChange = () => {};
-
-  const handleToChange = () => {};
 
   const reduced = data.reduce(function (allItems, item) {
     if (
@@ -70,12 +60,6 @@ const PieChart = (_) => {
 
   return (
     <div style={{ marginTop: 50 }}>
-      <DateRange
-        fromDate={dates.fromDate}
-        toDate={dates.toDate}
-        handleFromChange={handleFromChange}
-        handleToChange={handleToChange}
-      />
       <ReactECharts
         option={config}
         lazyUpdate
