@@ -5,15 +5,9 @@ import {
   CognitoUserPool,
 } from "amazon-cognito-identity-js";
 
-const userPoolId = process.env.REACT_APP_USERPOOL_ID;
-const clientId = process.env.REACT_APP_CLIENT_ID;
-
-console.log(`userpool id=${userPoolId}`);
-console.log(`client id=${clientId}`);
-
 const poolData = {
-  UserPoolId: "us-east-2_0zFL6Y5De",
-  ClientId: "7f3fhnuqttfogg3ouorh96dl1r",
+  UserPoolId: process.env.REACT_APP_USERPOOL_ID,
+  ClientId: process.env.REACT_APP_CLIENT_ID,
 };
 
 const userPool = new CognitoUserPool(poolData);
@@ -147,59 +141,5 @@ export async function setAttribute(attribute) {
     });
   }).catch((err) => {
     throw err;
-  });
-}
-
-export async function sendCode(username) {
-  return new Promise(function (resolve, reject) {
-    const cognitoUser = getCognitoUser(username);
-
-    if (!cognitoUser) {
-      reject(`could not find ${username}`);
-      return;
-    }
-
-    cognitoUser.forgotPassword({
-      onSuccess: function (res) {
-        resolve(res);
-      },
-      onFailure: function (err) {
-        reject(err);
-      },
-    });
-  }).catch((err) => {
-    throw err;
-  });
-}
-
-export async function forgotPassword(username, code, password) {
-  return new Promise(function (resolve, reject) {
-    const cognitoUser = getCognitoUser(username);
-
-    if (!cognitoUser) {
-      reject(`could not find ${username}`);
-      return;
-    }
-
-    cognitoUser.confirmPassword(code, password, {
-      onSuccess: function () {
-        resolve("password updated");
-      },
-      onFailure: function (err) {
-        reject(err);
-      },
-    });
-  });
-}
-
-export async function changePassword(oldPassword, newPassword) {
-  return new Promise(function (resolve, reject) {
-    currentUser.changePassword(oldPassword, newPassword, function (err, res) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
   });
 }

@@ -172,13 +172,6 @@ const AuthProvider = ({ children }) => {
       throw err;
     }
   }
-  async function sendCode(username) {
-    try {
-      await cognito.sendCode(username);
-    } catch (err) {
-      throw err;
-    }
-  }
 
   const state = {
     authStatus,
@@ -188,7 +181,6 @@ const AuthProvider = ({ children }) => {
     signOut,
     verifyCode,
     getSession,
-    sendCode,
     loading,
     data,
     deleteExpenseItem,
