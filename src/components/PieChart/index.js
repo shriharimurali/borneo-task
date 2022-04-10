@@ -58,6 +58,22 @@ const PieChart = (_) => {
     ],
   };
 
+  if (!data.length) {
+    return (
+      <div
+        style={{
+          marginTop: 50,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <h5>No Expense found...</h5>
+      </div>
+    );
+  }
+
   return (
     <div style={{ marginTop: 50 }}>
       <ReactECharts
